@@ -436,6 +436,20 @@ const LOCKED=[
   {g:'C',mi:0,h:1,a:1,nt:'Saibari (21\') abriu para o Marrocos. Vinicius Jr. (32\') empatou. Jogo equilibrado no MetLife.'},
   {g:'C',mi:1,h:0,a:1,nt:'McGinn (28\') decidiu em Boston. Escócia lidera o Grupo C na volta histórica após 28 anos!'},
   {g:'D',mi:1,h:2,a:0,nt:'ZEBRA! Irankunda (20 anos) abriu (27\'). Metcalfe ampliou. Turquia fez 30 finalizações sem gol!'},
+  // 14/jun
+  {g:'E',mi:0,h:7,a:1,nt:'Nmecha, Havertz(2x), Musiala, Brown, Schlotterbeck e Undav marcaram! Curaçao respondeu com Comenencia — 1° gol histórico do país em Copas.'},
+  {g:'E',mi:1,h:1,a:0,nt:'Amad Diallo decidiu aos 90\'! Costa do Marfim vence Equador no sufoco na Filadélfia. Equador desperdiçou demais.'},
+  {g:'F',mi:0,h:2,a:2,nt:'Kamada empatou nos acréscimos para o Japão! Van Dijk e Summerville × Nakamura e Kamada. Empate dramático em Dallas.'},
+  {g:'F',mi:1,h:5,a:1,nt:'Isak marcou 2 gols e a Suécia goleia Tunísia por 5-1 em Monterrey. Suécia lidera o Grupo F com autoridade.'},
+  // 15/jun
+  {g:'H',mi:0,h:0,a:0,nt:'Espanha dominou mas Cabo Verde segurou o empate histórico em Atlanta! Lamine Yamal travado durante 90 minutos. Surpreendente!'},
+  {g:'G',mi:0,h:1,a:1,nt:'Salah abriu para o Egito. De Bruyne empatou para a Bélgica. Grupo G completamente aberto após a 1ª rodada!'},
+  {g:'H',mi:1,h:1,a:1,nt:'Al-Dawsari marcou para a Arábia. Darwin Núñez empatou para o Uruguai. Tudo em aberto no Grupo H em Miami.'},
+  {g:'G',mi:1,h:2,a:2,nt:'Irã e Nova Zelândia empatam em 2-2! Resultado surpreendente que embaralha completamente o Grupo G em Los Angeles.'},
+  // 16/jun
+  {g:'I',mi:0,h:3,a:1,nt:'Mbappé e Thuram brilham! França confirma favoritismo sobre Senegal com 3-1 no MetLife em Nova York.'},
+  {g:'I',mi:1,h:1,a:4,nt:'HAALAND EXPLODE! Noruega goleia Iraque por 4-1. Haaland fez 2 gols. O artilheiro da Copa surge com força em Foxborough!'},
+  {g:'J',mi:0,h:3,a:0,nt:'Argentina domina com autoridade! Álvarez fez 2 gols. Messi distribuiu assistências. Argélia não teve espaço em Kansas City.'},
 ];
 
 // Match dates
@@ -472,8 +486,9 @@ function mkJust(hn,an,hs,as_){
   return txt;
 }
 function standings(g){
-  const ts=GS[g].map(nm=>({nm,f:TD[nm].f,rank:TD[nm].r,pts:0,w:0,dw:0,l:0,gf:0,ga:0,gd:0,played:0}));
-  PAIRS.forEach(([hi,ai],mi)=>{const sc=scores[g][mi];if(sc.h===undefined||sc.a===undefined)return;const h=+sc.h,a=+sc.a,th=ts[hi],ta=ts[ai];th.gf+=h;th.ga+=a;th.gd+=h-a;th.played++;ta.gf+=a;ta.ga+=h;ta.gd+=a-h;ta.played++;if(h>a){th.pts+=3;th.w++;ta.l++;}else if(h<a){ta.pts+=3;ta.w++;th.l++;}else{th.pts++;ta.pts++;th.dw++;ta.dw++;}});
+  if(!GS[g])return[];
+  const ts=GS[g].map(nm=>({nm,f:TD[nm]?.f||'🏳️',rank:TD[nm]?.r||99,pts:0,w:0,dw:0,l:0,gf:0,ga:0,gd:0,played:0}));
+  PAIRS.forEach(([hi,ai],mi)=>{const sc=(scores[g]||[])[mi]||{};if(sc.h===undefined||sc.a===undefined)return;const h=+sc.h,a=+sc.a,th=ts[hi],ta=ts[ai];th.gf+=h;th.ga+=a;th.gd+=h-a;th.played++;ta.gf+=a;ta.ga+=h;ta.gd+=a-h;ta.played++;if(h>a){th.pts+=3;th.w++;ta.l++;}else if(h<a){ta.pts+=3;ta.w++;th.l++;}else{th.pts++;ta.pts++;th.dw++;ta.dw++;}});
   return ts.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.rank-b.rank);
 }
 function getStPos(g,pos){const st=standings(g);return st[pos]?.nm||null;}
